@@ -25,5 +25,14 @@
         android:layout_height="wrap_content"
         android:background="@color/menu_color"
         android:layout_gravity="start"
-        app:menu="@menu/activity_main_menu" />
+        app:menu="@menu/activity_main_menu">
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cerrar sesion" />
+    </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

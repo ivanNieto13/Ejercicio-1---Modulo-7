@@ -1,5 +1,6 @@
 package dgtic.unam.modulosiete
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,13 +12,37 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import dgtic.unam.modulosiete.databinding.ActivityMainBinding
+
+enum class TipoProveedor {
+    CORREO,
+    GOOGLE,
+    FACEBOOK
+}
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawer: DrawerLayout
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        loginData()
         inicioToolsBar()
+    }
+
+    private fun loginData() {
+        var bundle: Bundle? = intent.extras
+        var email: String? = bundle?.getString("email")
+        var proveedor: String? = bundle?.getString("proveedor")
+
+        val preferencias =
+            getSharedPreferences(getString(R.string.file_preferencia), Context.MODE_PRIVATE).edit()
+        preferencias.putString("email", email)
+        preferencias.putString("proveedor", proveedor)
+        preferencias.apply()
+        preferencias.apply()
     }
 
     private fun inicioToolsBar() {
@@ -29,6 +54,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
         toolbar.setNavigationIcon(R.drawable.unam_32)
         iniciarNavegacionView()
+        binding.btnLogout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            onBackPressed()
+        }
     }
 
     private fun iniciarNavegacionView() {
